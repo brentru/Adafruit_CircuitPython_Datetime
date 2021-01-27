@@ -370,17 +370,17 @@ def _ord2ymd(n):
 class timedelta:
     """A timedelta object represents a duration, the difference between two dates or times.
 
-    Only days, seconds and microseconds are stored internally.
-    Arguments are converted to those units:
-        * A millisecond is converted to 1000 microseconds.
-        * A minute is converted to 60 seconds.
-        * An hour is converted to 3600 seconds.
-        * A week is converted to 7 days.
-    and days, seconds and microseconds are then normalized so that
-    the representation is unique, with:
-        * 0 <= microseconds < 1000000
-        * 0 <= seconds < 3600*24 (the number of seconds in one day)
-        * -999999999 <= days <= 999999999
+        Only days, seconds and microseconds are stored internally.
+        Arguments are converted to those units:
+            * A millisecond is converted to 1000 microseconds.
+            * A minute is converted to 60 seconds.
+            * An hour is converted to 3600 seconds.
+            * A week is converted to 7 days.
+        and days, seconds and microseconds are then normalized so that
+        the representation is unique, with:
+            * 0 <= microseconds < 1000000
+            * 0 <= seconds < 3600*24 (the number of seconds in one day)
+            * -999999999 <= days <= 999999999
 
     """
 
