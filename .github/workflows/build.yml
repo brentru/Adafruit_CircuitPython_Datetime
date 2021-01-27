@@ -54,6 +54,10 @@ jobs:
       run: |
         pylint $( find . -path './adafruit*.py' )
         ([[ ! -d "examples" ]] || pylint --disable=missing-docstring,invalid-name,bad-whitespace $( find . -path "./examples/*.py" ))
+    - name: Run tests
+      run: |
+        cd tests/ && python -m unittest discover
+        cd ..
     - name: Build assets
       run: circuitpython-build-bundles --filename_prefix ${{ steps.repo-name.outputs.repo-name }} --library_location .
     - name: Archive bundles
