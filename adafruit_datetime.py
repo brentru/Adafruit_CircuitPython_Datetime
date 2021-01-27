@@ -26,6 +26,7 @@ Implementation Notes
 
 
 """
+# pylint: disable=too-many-lines
 import time as _time
 import math as _math
 from micropython import const
@@ -666,6 +667,8 @@ class tzinfo:
         """Return the time zone name corresponding to the datetime object dt, as a string."""
         raise NotImplementedError("tzinfo subclass must override tzname()")
 
+    # tzinfo is an abstract base class, disabling for self._offset
+    # pylint: disable=no-member
     def fromutc(self, dt):
         "datetime in UTC -> datetime in local time."
 
@@ -1121,7 +1124,7 @@ class time:
         if off is not None:
             if off.days < 0:
                 sign = "-"
-                off = -off
+                off = -1 * off
             else:
                 sign = "+"
             hh, mm = divmod(off, timedelta(hours=1))
