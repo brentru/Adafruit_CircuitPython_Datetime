@@ -6,7 +6,7 @@
 #                         All rights reserved.
 # SPDX-FileCopyrightText: 1991-1995 Stichting Mathematisch Centrum. All rights reserved.
 # SPDX-FileCopyrightText: 2021 Brent Rubell for Adafruit Industries
-# SPDX-License-Identifier: GPL-2.0-or-later
+# SPDX-License-Identifier: Python-2.0
 
 # Example of working with a `time` object
 # from https://docs.python.org/3/library/datetime.html#examples-of-usage-time
