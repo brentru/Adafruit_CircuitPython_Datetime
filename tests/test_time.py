@@ -9,10 +9,13 @@
 # SPDX-License-Identifier: Python-2.0
 # Implements a subset of https://github.com/python/cpython/blob/master/Lib/test/datetimetester.py
 import unittest
+
 # CPython standard implementation
 from datetime import time as cpython_time
+
 # CircuitPython subset implementation
 import sys
+
 sys.path.append("..")
 from adafruit_datetime import time as cpy_time
 
@@ -23,6 +26,7 @@ OTHERSTUFF = (10, 34.5, "abc", {}, [], ())
 #############################################################################
 # Base class for testing a particular aspect of timedelta, time, date and
 # datetime comparisons.
+
 
 class HarmlessMixedComparison:
     # Test that __eq__ and __ne__ don't complain for mixed-type comparisons.
@@ -53,6 +57,7 @@ class HarmlessMixedComparison:
         self.assertRaises(TypeError, lambda: () <= me)
         self.assertRaises(TypeError, lambda: () > me)
         self.assertRaises(TypeError, lambda: () >= me)
+
 
 class TestTime(HarmlessMixedComparison, unittest.TestCase):
 
@@ -103,7 +108,7 @@ class TestTime(HarmlessMixedComparison, unittest.TestCase):
         for i in range(len(args)):
             newargs = args[:]
             newargs[i] = args[i] + 1
-            t2 = self.theclass(*newargs)   # this is larger than t1
+            t2 = self.theclass(*newargs)  # this is larger than t1
             self.assertTrue(t1 < t2)
             self.assertTrue(t2 > t1)
             self.assertTrue(t1 <= t2)
@@ -132,26 +137,25 @@ class TestTime(HarmlessMixedComparison, unittest.TestCase):
             self.assertRaises(TypeError, lambda: badarg > t1)
             self.assertRaises(TypeError, lambda: badarg >= t1)
 
-
     def test_bad_constructor_arguments(self):
         # bad hours
-        self.theclass(0, 0)    # no exception
-        self.theclass(23, 0)   # no exception
+        self.theclass(0, 0)  # no exception
+        self.theclass(23, 0)  # no exception
         self.assertRaises(ValueError, self.theclass, -1, 0)
         self.assertRaises(ValueError, self.theclass, 24, 0)
         # bad minutes
-        self.theclass(23, 0)    # no exception
-        self.theclass(23, 59)   # no exception
+        self.theclass(23, 0)  # no exception
+        self.theclass(23, 59)  # no exception
         self.assertRaises(ValueError, self.theclass, 23, -1)
         self.assertRaises(ValueError, self.theclass, 23, 60)
         # bad seconds
-        self.theclass(23, 59, 0)    # no exception
-        self.theclass(23, 59, 59)   # no exception
+        self.theclass(23, 59, 0)  # no exception
+        self.theclass(23, 59, 59)  # no exception
         self.assertRaises(ValueError, self.theclass, 23, 59, -1)
         self.assertRaises(ValueError, self.theclass, 23, 59, 60)
         # bad microseconds
-        self.theclass(23, 59, 59, 0)        # no exception
-        self.theclass(23, 59, 59, 999999)   # no exception
+        self.theclass(23, 59, 59, 0)  # no exception
+        self.theclass(23, 59, 59, 999999)  # no exception
         self.assertRaises(ValueError, self.theclass, 23, 59, 59, -1)
         self.assertRaises(ValueError, self.theclass, 23, 59, 59, 1000000)
 
@@ -167,8 +171,8 @@ class TestTime(HarmlessMixedComparison, unittest.TestCase):
         self.assertEqual(dic[d], 2)
         self.assertEqual(dic[e], 2)
 
-        d = self.theclass(0,  5, 17)
-        e = self.theclass(0,  5, 17)
+        d = self.theclass(0, 5, 17)
+        e = self.theclass(0, 5, 17)
         self.assertEqual(d, e)
         self.assertEqual(hash(d), hash(e))
 
@@ -211,7 +215,6 @@ class TestTime(HarmlessMixedComparison, unittest.TestCase):
         self.assertEqual(t.isoformat(), "00:00:00.100000")
         self.assertEqual(t.isoformat(), str(t))
 
-
     def test_1653736(self):
         # verify it doesn't accept extra keyword arguments
         t = self.theclass(second=1)
@@ -219,41 +222,44 @@ class TestTime(HarmlessMixedComparison, unittest.TestCase):
 
     def test_strftime(self):
         t = self.theclass(1, 2, 3, 4)
-        self.assertEqual(t.strftime('%H %M %S %f'), "01 02 03 000004")
+        self.assertEqual(t.strftime("%H %M %S %f"), "01 02 03 000004")
         # A naive object replaces %z and %Z with empty strings.
         self.assertEqual(t.strftime("'%z' '%Z'"), "'' ''")
         # bpo-34482: Check that surrogates don't cause a crash.
         try:
-            t.strftime('%H\ud800%M')
+            t.strftime("%H\ud800%M")
         except UnicodeEncodeError:
             pass
 
     def test_format(self):
         t = self.theclass(1, 2, 3, 4)
-        self.assertEqual(t.__format__(''), str(t))
+        self.assertEqual(t.__format__(""), str(t))
 
-        with self.assertRaisesRegex(TypeError, 'must be str, not int'):
+        with self.assertRaisesRegex(TypeError, "must be str, not int"):
             t.__format__(123)
 
         # check that a derived class's __str__() gets called
         class A(self.theclass):
             def __str__(self):
-                return 'A'
+                return "A"
+
         a = A(1, 2, 3, 4)
-        self.assertEqual(a.__format__(''), 'A')
+        self.assertEqual(a.__format__(""), "A")
 
         # check that a derived class's strftime gets called
         class B(self.theclass):
             def strftime(self, format_spec):
-                return 'B'
-        b = B(1, 2, 3, 4)
-        self.assertEqual(b.__format__(''), str(t))
+                return "B"
 
-        for fmt in ['%H %M %S',
-                    ]:
+        b = B(1, 2, 3, 4)
+        self.assertEqual(b.__format__(""), str(t))
+
+        for fmt in [
+            "%H %M %S",
+        ]:
             self.assertEqual(t.__format__(fmt), t.strftime(fmt))
             self.assertEqual(a.__format__(fmt), t.strftime(fmt))
-            self.assertEqual(b.__format__(fmt), 'B')
+            self.assertEqual(b.__format__(fmt), "B")
 
     def test_str(self):
         self.assertEqual(str(self.theclass(1, 2, 3, 4)), "01:02:03.000004")
@@ -263,17 +269,16 @@ class TestTime(HarmlessMixedComparison, unittest.TestCase):
         self.assertEqual(str(self.theclass(23, 15, 0, 0)), "23:15:00")
 
     def test_repr(self):
-        name = 'datetime.' + self.theclass.__name__
-        self.assertEqual(repr(self.theclass(1, 2, 3, 4)),
-                         "%s(1, 2, 3, 4)" % name)
-        self.assertEqual(repr(self.theclass(10, 2, 3, 4000)),
-                         "%s(10, 2, 3, 4000)" % name)
-        self.assertEqual(repr(self.theclass(0, 2, 3, 400000)),
-                         "%s(0, 2, 3, 400000)" % name)
-        self.assertEqual(repr(self.theclass(12, 2, 3, 0)),
-                         "%s(12, 2, 3)" % name)
-        self.assertEqual(repr(self.theclass(23, 15, 0, 0)),
-                         "%s(23, 15)" % name)
+        name = "datetime." + self.theclass.__name__
+        self.assertEqual(repr(self.theclass(1, 2, 3, 4)), "%s(1, 2, 3, 4)" % name)
+        self.assertEqual(
+            repr(self.theclass(10, 2, 3, 4000)), "%s(10, 2, 3, 4000)" % name
+        )
+        self.assertEqual(
+            repr(self.theclass(0, 2, 3, 400000)), "%s(0, 2, 3, 400000)" % name
+        )
+        self.assertEqual(repr(self.theclass(12, 2, 3, 0)), "%s(12, 2, 3)" % name)
+        self.assertEqual(repr(self.theclass(23, 15, 0, 0)), "%s(23, 15)" % name)
 
     @unittest.skip("Skip for CircuitPython  - not implemented")
     def test_resolution_info(self):
@@ -284,7 +289,7 @@ class TestTime(HarmlessMixedComparison, unittest.TestCase):
 
     @unittest.skip("Skip for CircuitPython  - not implemented")
     def test_pickling(self):
-        args = 20, 59, 16, 64**2
+        args = 20, 59, 16, 64 ** 2
         orig = self.theclass(*args)
         for pickler, unpickler, proto in pickle_choices:
             green = pickler.dumps(orig, proto)
@@ -293,7 +298,7 @@ class TestTime(HarmlessMixedComparison, unittest.TestCase):
 
     @unittest.skip("Skip for CircuitPython  - not implemented")
     def test_pickling_subclass_time(self):
-        args = 20, 59, 16, 64**2
+        args = 20, 59, 16, 64 ** 2
         orig = SubclassTime(*args)
         for pickler, unpickler, proto in pickle_choices:
             green = pickler.dumps(orig, proto)
@@ -318,10 +323,12 @@ class TestTime(HarmlessMixedComparison, unittest.TestCase):
         self.assertEqual(base, base.replace())
 
         i = 0
-        for name, newval in (("hour", 5),
-                             ("minute", 6),
-                             ("second", 7),
-                             ("microsecond", 8)):
+        for name, newval in (
+            ("hour", 5),
+            ("minute", 6),
+            ("second", 7),
+            ("microsecond", 8),
+        ):
             newargs = args[:]
             newargs[i] = newval
             expected = cls(*newargs)
@@ -345,13 +352,12 @@ class TestTime(HarmlessMixedComparison, unittest.TestCase):
         self.assertIs(type(ctime.replace(hour=10)), TimeSubclass)
 
     def test_subclass_time(self):
-
         class C(self.theclass):
             theAnswer = 42
 
             def __new__(cls, *args, **kws):
                 temp = kws.copy()
-                extra = temp.pop('extra')
+                extra = temp.pop("extra")
                 result = self.theclass.__new__(cls, *args, **temp)
                 result.extra = extra
                 return result
@@ -362,7 +368,7 @@ class TestTime(HarmlessMixedComparison, unittest.TestCase):
         args = 4, 5, 6
 
         dt1 = self.theclass(*args)
-        dt2 = C(*args, **{'extra': 7})
+        dt2 = C(*args, **{"extra": 7})
 
         self.assertEqual(dt2.__class__, C)
         self.assertEqual(dt2.theAnswer, 42)
@@ -372,10 +378,9 @@ class TestTime(HarmlessMixedComparison, unittest.TestCase):
 
     def test_backdoor_resistance(self):
         # see TestDate.test_backdoor_resistance().
-        base = '2:59.0'
-        for hour_byte in ' ', '9', chr(24), '\xff':
-            self.assertRaises(TypeError, self.theclass,
-                                         hour_byte + base[1:])
+        base = "2:59.0"
+        for hour_byte in " ", "9", chr(24), "\xff":
+            self.assertRaises(TypeError, self.theclass, hour_byte + base[1:])
         # Good bytes, but bad tzinfo:
         with self.assertRaises(TypeError):
-            self.theclass(bytes([1] * len(base)), 'EST')
+            self.theclass(bytes([1] * len(base)), "EST")
