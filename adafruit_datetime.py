@@ -369,6 +369,7 @@ def _ord2ymd(n):
 
 class timedelta:
     """A timedelta object represents a duration, the difference between two dates or times."""
+
     # pylint: disable=too-many-arguments
     def __new__(
         cls,
