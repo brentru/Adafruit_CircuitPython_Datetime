@@ -6,6 +6,8 @@
 #                         All rights reserved.
 # SPDX-FileCopyrightText: 1991-1995 Stichting Mathematisch Centrum. All rights reserved.
 # SPDX-FileCopyrightText: 2017 Paul Sokolovsky
+# SPDX-License-Identifier: GPL-2.0-or-later
+
 """
 `adafruit_datetime`
 ================================================================================

@@ -1,3 +1,12 @@
+# SPDX-FileCopyrightText: 2001-2021 Python Software Foundation.All rights reserved.
+# SPDX-FileCopyrightText: 2000 BeOpen.com. All rights reserved.
+# SPDX-FileCopyrightText: 1995-2001 Corporation for National Research Initiatives.
+#                         All rights reserved.
+# SPDX-FileCopyrightText: 1995-2001 Corporation for National Research Initiatives.
+#                         All rights reserved.
+# SPDX-FileCopyrightText: 1991-1995 Stichting Mathematisch Centrum. All rights reserved.
+# SPDX-FileCopyrightText: 2021 Brent Rubell for Adafruit Industries
+# SPDX-License-Identifier: GPL-2.0-or-later
 # Implements a subset of https://github.com/python/cpython/blob/master/Lib/test/datetimetester.py
 import sys
 import unittest
